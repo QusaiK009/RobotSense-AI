@@ -16,10 +16,7 @@ def diagnose_motor(readings):
 
 
 if __name__ == "__main__":
-    motor_data = {
-        "temperature_c": 82,
-        "current_a": 3.5
-    }
+    motor_data = {"temperature_c": 82,"current_a": 3.5}
 
     result = diagnose_motor(motor_data)
     print(result)
