@@ -8,14 +8,18 @@ def diagnose_motor(readings):
     if readings["current_a"] > 3.0:
         warnings.append("Motor current too high")
 
-    return warnings
+    return {
+        "status": "warning" if warnings else "normal",
+        "warnings": warnings,
+        "measurements": readings
+    }
 
 
-motor_data = {
-    "temperature_c": 82,
-    "current_a": 3.5
-}
+if __name__ == "__main__":
+    motor_data = {
+        "temperature_c": 82,
+        "current_a": 3.5
+    }
 
-result = diagnose_motor(motor_data)
-
-print(result)
+    result = diagnose_motor(motor_data)
+    print(result)
