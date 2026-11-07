@@ -1,43 +1,49 @@
-
 # RobotSense AI
 
-A Python-based robotics diagnostic prototype combining deterministic fault detection, REST APIs, and LLM-generated explanations.
+A Python-based robotics diagnostics prototype integrating deterministic fault detection, Flask REST APIs, and Google Gemini AI to generate human-readable explanations of simulated motor measurements.
 
 ## Overview
 
-RobotSense AI demonstrates how conventional engineering logic can be integrated with generative AI to interpret simulated robotic actuator measurements.
+RobotSense AI demonstrates how conventional engineering logic can be combined with generative AI within a backend application.
 
-The application evaluates motor temperature and current against configurable rules, produces structured diagnostic results, and uses Google's Gemini API to generate human-readable explanations.
+The system receives motor measurements through a REST API, evaluates them against predefined thresholds, and uses Google's Gemini API to explain the resulting diagnostic findings.
 
-All measurements and thresholds are simulated for demonstration purposes.
+The deterministic rules operate independently of the language model, allowing diagnostic results to remain available even when the AI service fails.
+
+**Project status:** Functional learning prototype.
+
+**Data:** All measurements and thresholds are simulated for demonstration purposes.
 
 ## Features
 
-- Rule-based motor diagnostics
-- Temperature and current monitoring
-- REST API built with Flask
-- JSON request and response handling
+- Rule-based motor diagnostics using Python
+- Temperature and current threshold monitoring
+- REST API using Flask
+- JSON request validation and structured responses
 - Google Gemini LLM integration
-- Graceful handling of LLM service failures
-- Environment-based API key configuration
+- Error handling for unavailable LLM services
+- Environment-based API key management
+- Automated unit testing using Python's `unittest`
 
-## Architecture
+## System Architecture
 
+```text
 Client (HTTP POST)
-    |
-    v
+        |
+        v
 Flask REST API (app.py)
-    |
-    v
+        |
+        v
 Diagnostic Engine (diagnostics.py)
-    |
-    v
+        |
+        v
 Gemini Integration (llm_client.py)
-    |
-    v
+        |
+        v
 Combined JSON Response
+```
 
-The deterministic diagnostic engine determines warning conditions independently. The LLM provides explanatory text and does not control the diagnostic rules.
+The diagnostic engine determines warning conditions using predefined engineering rules. The LLM provides explanatory text but does not determine warning status or override the diagnostic results.
 
 ## Technology Stack
 
@@ -45,64 +51,104 @@ The deterministic diagnostic engine determines warning conditions independently.
 - Flask
 - Google Gemini API
 - python-dotenv
+- Python unittest
 - Git and GitHub
 
 ## Installation
 
 1. Clone the repository.
-2. Create a Python virtual environment.
-3. Install dependencies:
+2. Create and activate a Python virtual environment.
+3. Install the required dependencies:
 
-   python -m pip install -r requirements.txt
+```bash
+python -m pip install -r requirements.txt
+```
 
 4. Copy `.env.example` to `.env`.
 5. Add your Gemini API key to `.env`.
 6. Start the Flask application:
 
-   python app.py
+```bash
+python app.py
+```
 
-The server runs locally at:
+The application runs locally at:
 
-http://127.0.0.1:5000
+`http://127.0.0.1:5000`
 
-## API
+## API Usage
 
 ### POST /diagnose
 
-Example request:
+Example JSON request:
 
+```json
 {
   "temperature_c": 82,
   "current_a": 3.5
 }
+```
 
-The endpoint returns the original measurements, diagnostic status, warnings, AI-generated explanation, and AI service status.
+The endpoint returns:
 
-## Example Diagnostic Rules
+- Original motor measurements
+- Overall diagnostic status
+- Detected warning messages
+- AI-generated diagnostic explanation
+- AI service availability status
 
-- Temperature above 75°C triggers a warning.
-- Current above 3.0 A triggers a warning.
+## Diagnostic Rules
 
-These thresholds are illustrative and are not derived from validated motor specifications. You can alter the code to your liking/thresholds to test
+The current prototype uses these illustrative thresholds:
+
+| Parameter | Warning condition |
+|---|---|
+| Motor temperature | Greater than 75°C |
+| Motor current | Greater than 3.0 A |
+
+These values are hardcoded for demonstration purposes and do not represent validated manufacturer operating limits.
+
+## Automated Testing
+
+Automated tests are implemented using Python's built-in `unittest` framework.
+
+The verified test cases include:
+
+- Normal motor conditions
+- Motor overheating detection
+
+The tests verify that the diagnostic engine produces the expected status and warning messages.
+
+To run the tests:
+
+```bash
+python -m unittest -v test_diagnostics
+```
+
+Tests can also be executed directly through VS Code using Code Runner when the test file includes a `unittest.main()` entry point.
 
 ## Limitations
 
-- Uses simulated measurements only.
-- Does not predict equipment failures.
-- Does not train or deploy a machine learning model.
-- LLM explanations may be inaccurate and require engineering review.
-- Requires network connectivity and Gemini API access for AI explanations.
-- Not validated for safety-critical or industrial operation.
-- Uses Flask's local development server, not a production deployment.
+- Uses simulated measurements rather than live sensors.
+- Thresholds are illustrative and currently hardcoded.
+- Does not train machine learning models or predict future failures.
+- AI-generated explanations may contain inaccuracies.
+- AI response times depend on external API availability.
+- The application has not been validated for industrial or safety-critical operation.
+- Uses Flask's local development server rather than production infrastructure.
 
 ## Future Improvements
 
-- Additional sensor measurements
-- Configurable threshold profiles
-- Historical measurements and trend analysis
-- Automated diagnostic testing
-- Simple web dashboard
+- Integration with real sensor hardware
+- Configurable motor-specific diagnostic thresholds
+- Historical sensor measurements and trend analysis
+- Expanded automated testing and API failure simulation
+- Interactive web dashboard
+- Additional actuator and sensor diagnostics
+- Improved timeout and retry handling for LLM requests
 
-## Project Status
+## Project Purpose
 
-Functional learning prototype developed independently to explore Python backend development, REST APIs, and LLM integration.
+RobotSense AI is an independently developed learning project exploring the intersection of robotics engineering, Python backend development, REST APIs, and generative AI.
+
+The project demonstrates how deterministic engineering logic and language-model-based explanations can be integrated while keeping safety-related decisions outside the LLM.
