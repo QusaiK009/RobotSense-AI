@@ -108,6 +108,25 @@ The current prototype uses these illustrative thresholds:
 
 These values are hardcoded for demonstration purposes and do not represent validated manufacturer operating limits.
 
+## Multi-Actuator Diagnostics
+
+RobotSense AI also supports evaluating multiple simulated robotic actuators through a reusable Python diagnostic module.
+
+The `system_diagnostics.py` module processes a collection of motor measurements, evaluates each motor using the existing deterministic diagnostic rules, and generates a system-level summary.
+
+**Current functionality:**
+- Supports multiple motors identified by unique motor IDs.
+- Evaluates temperature and current independently for each motor.
+- Identifies motors exceeding illustrative warning thresholds.
+- Counts the total number of motors and those reporting warnings.
+- Reports an overall system status.
+
+**Example:** A simulated system containing three motors, one of which exceeds both warning thresholds, produces an overall warning status with one affected motor.
+
+The multi-actuator module currently runs as a standalone Python component. The Flask `/diagnose` endpoint supports individual motor readings; a dedicated multi-actuator API endpoint is a planned extension.
+
+All readings and thresholds are simulated. The module is not validated for real-time industrial condition monitoring.
+
 ## Automated Testing
 
 Automated tests are implemented using Python's built-in `unittest` framework.

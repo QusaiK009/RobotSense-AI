@@ -15,7 +15,7 @@ def explain_diagnostics(diagnostic_result):
 
     prompt = (
         "You are assisting with a prototype robotics diagnostic application. The warning thresholds are illustrative, not validated safety limits. "
-        "Explain the provided diagnostic findings in 2-3 sentences. Do not invent causes or claim that the thresholds are official.\n\n"
+        "Explain the provided diagnostic findings in 2-3 sentences. Do not invent causes or claim that the thresholds are official. Explain the results like the user is 5. Preserve technical Accuracy \n\n"
         f"Diagnostic data:\n{json.dumps(diagnostic_result)}"
     )
 
